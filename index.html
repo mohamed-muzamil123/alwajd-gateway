@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ALWAJD Panel Hub</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #1e3a8a, #10b981, #6b21a8);
+      --card-bg: rgba(255, 255, 255, 0.1);
+      --card-border: rgba(255, 255, 255, 0.2);
+      --glow-blue: #3b82f6;
+      --glow-green: #10b981;
+      --glow-purple: #8b5cf6;
+      --text-light: #f9fafb;
+      --text-dark: #1e293b;
+      --shadow-glow: 0 0 15px rgba(59, 130, 246, 0.3);
+      --glass-blur: blur(10px);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-light);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
+      transition: all 0.5s ease;
+    }
+
+    /* Login Screen */
+    #loginContainer {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background: inherit;
+      z-index: 1000;
+      transition: opacity 0.5s ease;
+    }
+
+    .login-card {
+      background: var(--card-bg);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 2rem;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: var(--shadow-glow);
+      animation: glowPulse 2s infinite alternate;
+    }
+
+    @keyframes glowPulse {
+      0% { box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
+      100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); }
+    }
+
+    .login-card h2 {
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+      font-weight: 300;
+    }
+
+    .form-control {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      color: var(--text-light);
+      padding: 0.75rem;
+      width: 100%;
+      margin-bottom: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-control::placeholder {
+      color: rgba(249, 250, 251, 0.5);
+    }
+
+    .form-control:focus {
+      border-color: var(--glow-green);
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+      outline: none;
+    }
+
+    .btn-login {
+      background: linear-gradient(45deg, var(--glow-blue), var(--glow-purple));
+      border: none;
+      border-radius: 10px;
+      color: var(--text-light);
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 500;
+      width: 100%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-login:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+    }
+
+    /* Dashboard */
+    #dashboard {
+      display: none;
+      width: 100%;
+      min-height: 100vh;
+      padding: 2rem;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      transform: translateY(20px);
+      opacity: 0;
+    }
+
+    #dashboard.active {
+      display: block;
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .dashboard-header {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--card-border);
+      position: relative;
+    }
+
+    .dashboard-header h1 {
+      font-size: 2.5rem;
+      font-weight: 300;
+      letter-spacing: 2px;
+      position: relative;
+    }
+
+    .dashboard-header h1::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50%;
+      height: 2px;
+      background: var(--glow-green);
+      box-shadow: 0 0 10px var(--glow-green);
+      animation: glowUnderline 2s infinite alternate;
+    }
+
+    @keyframes glowUnderline {
+      0% { width: 40%; }
+      100% { width: 60%; }
+    }
+
+    .logout-btn {
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      background: linear-gradient(45deg, var(--glow-purple), var(--glow-blue));
+      border: none;
+      border-radius: 8px;
+      color: var(--text-light);
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .logout-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 10px rgba(139, 92, 246, 0.4);
+    }
+
+    .dashboard-subtitle {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: rgba(249, 250, 251, 0.7);
+      font-size: 1rem;
+    }
+
+    .panel-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .panel-card {
+      background: var(--card-bg);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--card-border);
+      border-radius: 15px;
+      padding: 1.5rem;
+      text-align: center;
+      color: var(--text-light);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: var(--card-glow);
+      z-index: 1;
+    }
+
+    .panel-card:hover {
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 0 25px var(--card-glow);
+    }
+
+    .panel-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      filter: drop-shadow(0 0 10px var(--card-glow));
+      transition: transform 0.3s ease;
+    }
+
+    .panel-card:hover .panel-icon {
+      transform: scale(1.1);
+    }
+
+    .panel-card h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .panel-card p {
+      font-size: 0.9rem;
+      color: rgba(249, 250, 251, 0.7);
+      line-height: 1.4;
+    }
+
+    .panel-card a {
+      color: var(--text-light);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    /* Card Variants */
+    .card-admin-prog { --card-glow: var(--glow-blue); }
+    .card-admin-judge { --card-glow: var(--glow-purple); }
+    .card-judge { --card-glow: var(--glow-green); }
+    .card-green { --card-glow: var(--glow-cyan); }
+    .card-media-marks { --card-glow: var(--glow-purple); }
+    .card-media-codes { --card-glow: var(--glow-gold); }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 1rem;
+      color: rgba(249, 250, 251, 0.7);
+      font-family: 'Georgia', serif;
+      font-size: 0.9rem;
+      margin-top: 2rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .panel-grid {
+        grid-template-columns: 1fr;
+      }
+      .dashboard-header h1 {
+        font-size: 2rem;
+      }
+      .panel-card {
+        padding: 1rem;
+      }
+      .panel-icon {
+        font-size: 2rem;
+      }
+    }
+
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .panel-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Login Container -->
+  <div id="loginContainer">
+    <div class="login-card">
+      <h2>ALWAJD Panel Hub</h2>
+      <form id="loginForm">
+        <input type="password" class="form-control" id="password" placeholder="Enter Access Password" required>
+        <button type="submit" class="btn-login">Access Hub</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashboard">
+    <div class="dashboard-header">
+      <h1>ALWAJD Panel Hub</h1>
+      <button class="logout-btn" id="logoutBtn">Logout</button>
+    </div>
+    <div class="dashboard-subtitle">Choose your panel to continue.</div>
+    <div class="panel-grid">
+      <div class="panel-card card-admin-prog" onclick="window.open('https://al-wajd-main-admin-panel.vercel.app/','_blank')">
+  <i class="bi bi-gear-wide panel-icon"></i>
+  <h3>Admin Panel – Programmes & Students</h3>
+  <p>Add programmes, manage students, assign students to programmes.</p>
+  <a href="https://al-wajd-main-admin-panel.vercel.app/">Enter</a>
+</div>
+
+<div class="panel-card card-admin-judge" onclick="window.open('https://al-wajd-sub-admin-panel.vercel.app/','_blank')">
+  <i class="bi bi-gear-wide panel-icon"></i>
+  <h3>Admin Panel – Judges</h3>
+  <p>Add judges, generate one-time passwords, and send judge links.</p>
+  <a href="https://al-wajd-sub-admin-panel.vercel.app/">Enter</a>
+</div>
+
+<div class="panel-card card-judge" onclick="window.open('https://al-wajd-judge-panel.vercel.app/','_blank')">
+  <i class="bi bi-mic panel-icon"></i>
+  <h3>Judge Panel</h3>
+  <p>Judges enter marks securely via one-time password.</p>
+  <a href="https://al-wajd-judge-panel.vercel.app/">Enter</a>
+</div>
+
+<div class="panel-card card-green" onclick="window.open('https://al-wajd-green-room-panel.vercel.app/','_blank')">
+  <i class="bi bi-person-video panel-icon"></i>
+  <h3>Green Room Panel</h3>
+  <p>Manage student lineup, assign code letters, and control programme flow.</p>
+  <a href="https://al-wajd-green-room-panel.vercel.app/">Enter</a>
+</div>
+
+<div class="panel-card card-media-marks" onclick="window.open('https://al-wajd-sub-media-panel.vercel.app/','_blank')">
+  <i class="bi bi-camera-video panel-icon"></i>
+  <h3>Media Team Panel – Marks Entry</h3>
+  <p>Pending and successful mark entry management.</p>
+  <a href="https://al-wajd-sub-media-panel.vercel.app/">Enter</a>
+</div>
+
+<div class="panel-card card-media-codes" onclick="window.open('https://al-wajd-main-media-panel.vercel.app/','_blank')">
+  <i class="bi bi-camera-reels panel-icon"></i>
+  <h3>Media Team Panel – Code Letters</h3>
+  <p>View students’ code letters after programme finish for result entry.</p>
+  <a href="https://al-wajd-main-media-panel.vercel.app/">Enter</a>
+</div>
+
+    </div>
+    <footer class="footer">
+      <p>Developed by <strong>Mohammed Muzammil</strong></p>
+    </footer>
+  </div>
+
+  <script>
+    const loginContainer = document.getElementById('loginContainer');
+    const dashboard = document.getElementById('dashboard');
+    const loginForm = document.getElementById('loginForm');
+    const passwordInput = document.getElementById('password');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    // Check login state on page load
+    if (localStorage.getItem('isLoggedIn') === 'true') {
+      loginContainer.style.display = 'none';
+      dashboard.classList.add('active');
+    }
+
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (passwordInput.value === '1234') {
+        localStorage.setItem('isLoggedIn', 'true');
+        loginContainer.style.opacity = '0';
+        setTimeout(() => {
+          loginContainer.style.display = 'none';
+          dashboard.classList.add('active');
+        }, 500);
+      } else {
+        passwordInput.style.borderColor = 'var(--glow-purple)';
+        setTimeout(() => passwordInput.style.borderColor = '', 2000);
+      }
+    });
+
+    logoutBtn.addEventListener('click', () => {
+      localStorage.removeItem('isLoggedIn');
+      dashboard.classList.remove('active');
+      loginContainer.style.display = 'flex';
+      loginContainer.style.opacity = '1';
+      passwordInput.value = '';
+    });
+  </script>
+</body>
+</html>
